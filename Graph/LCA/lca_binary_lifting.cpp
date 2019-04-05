@@ -33,7 +33,7 @@ int readInt ()
 int tin[N + 1], tout[N + 1], _time;
 int up[N + 1][LOGN + 1];
 vector<int> g[N + 1];
-void dfs(int v, int p = 0) {
+void dfs(int v, int p = 1) {
     up[v][0] = p;
     for (int i = 1; i <= LOGN; i++) {
         up[v][i] = up[up[v][i - 1]][i - 1];
