@@ -1,5 +1,5 @@
 /**
-implementation kuhn's algorithm for find maximum matching
+implementation Kuhn's algorithm for find maximum matching
 in given bipartite graph
 on example Codeforces problem BerSU Ball https://codeforces.com/contest/489/problem/B
 **/

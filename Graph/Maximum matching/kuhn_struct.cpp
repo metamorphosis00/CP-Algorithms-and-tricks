@@ -1,5 +1,5 @@
 /**
-implementation kuhn's optimized algorithm with struct
+implementation Kuhn's optimized algorithm with struct
 for find maximum matching in given bipartite graph
 Codeforces problem BerSU Ball https://codeforces.com/contest/489/problem/B
 **/
