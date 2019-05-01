@@ -39,6 +39,7 @@ int a[N], b[N];
 struct BipartiteMatcher {
     vector<vector<int> > G;
     vector<int> mt, tm, used;
+    int T = 1;
 
     BipartiteMatcher(int n, int m) :
         G(n + 1), mt(m + 1, -1), tm(n + 1, -1), used(n + 1, false) {}
@@ -48,8 +49,8 @@ struct BipartiteMatcher {
     }
 
     bool tryKuhn(int v) {
-        if (used[v]) return false;
-        used[v] = true;
+        if (used[v] == T) return false;
+        used[v] = T;
         for (int to : G[v]) {
             if (mt[to] == -1) {
                 mt[to] = v;
@@ -71,10 +72,10 @@ struct BipartiteMatcher {
         int run = 1;
         while (run) {
             run = 0;
-            fill(used.begin(), used.end(), false);
             for (int i = 0; i < (int)tm.size(); i++) {
-                if (tm[i] == -1 && tryKuhn(i)) {
-                    run = 1;
+                if (tm[i] == -1) {
+                    ++T;
+                    run += tryKuhn(i);
                 }
             }
         }
