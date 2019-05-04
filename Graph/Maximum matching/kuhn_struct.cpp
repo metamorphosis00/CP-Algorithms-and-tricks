@@ -57,6 +57,22 @@ struct BipartiteMatcher {
         G[a].push_back(b);
     }
 
+    void init(int n, int m)
+    {
+        T = 1;
+        for (int i = 0; i < G.size(); i++) {
+            G[i].clear();
+        }
+        G.resize(n + 1);
+        tm.resize(n + 1);
+        used.resize(n + 1);
+        mt.resize(m + 1);
+
+        fill(mt.begin(), mt.end(), -1);
+        fill(tm.begin(), tm.end(), -1);
+        fill(used.begin(), used.end(), false);
+    }
+
     void reset()
     {
         T = 1;
