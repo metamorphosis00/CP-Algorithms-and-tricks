@@ -47,6 +47,10 @@ char readChar()
 }
 int t[4 * N + 1], col[4 * N + 1];
 int n, m;
+void pull(int v, int tl, int tr)
+{
+    t[v] = max(t[2 * v] + col[2 * v], t[2 * v + 1] + col[2 * v + 1]);
+}
 void push(int v)
 {
     col[2 * v] += col[v];
@@ -71,7 +75,7 @@ void add(int v, int tl, int tr, int L, int R, int x)
         add(2 * v, tl, tm, L, tm, x);
         add(2 * v + 1, tm + 1, tr, tm + 1, R, x);
     }
-    t[v] = max(t[2 * v] + col[2 * v], t[2 * v + 1] + col[2 * v + 1]);
+    pull(v, tl, tr);
 }
 int getMax(int v, int tl, int tr, int L, int R)
 {
@@ -90,7 +94,7 @@ int getMax(int v, int tl, int tr, int L, int R)
     else {
         ans = max(getMax(2 * v, tl, tm, L, tm), getMax(2 * v + 1, tm + 1, tr, tm + 1, R));
     }
-    t[v] = max(t[2 * v] + col[2 * v], t[2 * v + 1] + col[2 * v + 1]);
+    pull(v, tl, tr);
     return ans;
 }
 main()
@@ -109,7 +113,7 @@ main()
             add(1, 1, n, l, r, a);
         }
         else {
-            cout << getMax(1, 1, n, l, r) << "\n";
+            printf("%I64d\n", getMax(1, 1, n, l, r));
         }
     }
 }

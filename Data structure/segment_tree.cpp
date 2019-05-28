@@ -34,6 +34,10 @@ int readInt()
         return result;
 }
 int t[4 * N + 1], a[N + 1];
+void pull(int v, int tl, int tr)
+{
+    t[v] = t[2 * v] + t[2 * v + 1];
+}
 void build(int v, int tl, int tr)
 {
     if (tl == tr) {
@@ -43,7 +47,7 @@ void build(int v, int tl, int tr)
     int tm = (tl + tr) >> 1;
     build(2 * v, tl, tm);
     build(2 * v + 1, tm + 1, tr);
-    t[v] = t[2 * v] + t[2 * v + 1];
+    pull(v, tl, tr);
 }
 void upd(int v, int tl, int tr, int id, int x)
 {
@@ -58,7 +62,7 @@ void upd(int v, int tl, int tr, int id, int x)
     else {
         upd(2 * v + 1, tm + 1, tr, id, x);
     }
-    t[v] = t[2 * v] + t[2 * v + 1];
+    pull(v, tl, tr);
 }
 int getSum(int v, int tl, int tr, int L, int R)
 {
