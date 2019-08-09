@@ -1,3 +1,6 @@
 # ignore all .o and .exe
 *.o
+*.txt
+*.bat
+
 
