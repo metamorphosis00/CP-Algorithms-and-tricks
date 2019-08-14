@@ -44,6 +44,9 @@ int getRand(int l, int r)
     return uniform_int_distribution<int>(l, r)(rng);
 }
 namespace number {
+    vector<int> primes;
+    vector<char> p;
+    vector<int> lp;
 
     bool isPrime(int n)
     {
@@ -52,6 +55,12 @@ namespace number {
             if (n % i == 0) return false;
         }
         return true;
+    }
+
+    bool isPerfectSquare(int n)
+    {
+        int sq = sqrt(n);
+        return sq * sq == n;
     }
 
     int phi(int n)
@@ -69,6 +78,29 @@ namespace number {
             res -= res / n;
         }
         return res;
+    }
+
+    void sieveOfEratosthenes(int n)
+    {
+        primes.clear();
+        p.resize(n + 1);
+        lp.resize(n + 1);
+
+        fill(p.begin(), p.end(), true);
+        fill(lp.begin(), lp.end(), 0);
+
+        p[0] = p[1] = false;
+
+        for (int i = 2; i <= n; i++) {
+            if (p[i]) {
+                primes.push_back(i);
+                lp[i] = i;
+                for (int j = 2 * i; j <= n; j += i) {
+                    lp[j] = i;
+                    p[j] = false;
+                }
+            }
+        }
     }
 };
 main() {
