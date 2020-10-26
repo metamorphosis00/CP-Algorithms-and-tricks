@@ -38,6 +38,15 @@ char readChar()
     }
     return result;
 }
+void printInt(int x)
+{
+    if (x / 10 == 0) {
+        putchar(x + 48);
+        return;
+    }
+    printInt(x / 10);
+    putchar(x % 10 + 48);
+}
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 int getRand(int l, int r)
 {
