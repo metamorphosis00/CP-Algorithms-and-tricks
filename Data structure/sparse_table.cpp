@@ -2,7 +2,7 @@
 
 using namespace std;
 const int N = 100000;
-const int M = 18;
+const int M = 18; // log2(N) => log2(100000) ~ 17
 
 int lg[N + 1];
 int sp[N + 1][M + 1];
