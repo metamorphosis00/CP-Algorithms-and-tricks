@@ -42,7 +42,7 @@ struct node {
 
     node() {
         sum = 0;
-        mn = -INF;
+        mx = -INF;
         mn = INF;
     }
 };
@@ -55,8 +55,8 @@ struct segTree {
         this->nn = n;
         for (int i = 1; i <= 4 * n; ++i) {
             t[i].sum = 0;
-            t[i].mn = -INF;
-            t[i].mx = INF;
+            t[i].mn = INF;
+            t[i].mx = -INF;
         }
     }
 
