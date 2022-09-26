@@ -9,6 +9,7 @@ https://codeforces.com/blog/entry/16719?locale=ru
 **/
 
 #include <iostream>
+
 #define int long long
 
 using namespace std;
@@ -16,8 +17,7 @@ using namespace std;
 const int N = 200000;
 const int INF = 1000000000;
 
-int readInt()
-{
+int readInt() {
     bool minus = false;
     int result = 0;
     char ch;
@@ -50,8 +50,7 @@ struct node {
     int mul;
     int add;
 
-    node()
-    {
+    node() {
         sum = 0;
         mul = 1;
         add = 0;
@@ -60,10 +59,9 @@ struct node {
 
 struct segTree {
     int nn;
-    node* t = new node[4 * N + 1];
+    node *t = new node[4 * N + 1];
 
-    void init(int n)
-    {
+    void init(int n) {
         this->nn = n;
         for (int i = 1; i <= 4 * n; ++i) {
             t[i].sum = 0;
@@ -72,19 +70,17 @@ struct segTree {
         }
     }
 
-    segTree(int n = 0)
-    {
+    segTree(int n = 0) {
         init(n);
     }
 
-    void pull(int v, int tl, int tr)
-    {
+    void pull(int v, int tl, int tr) {
         int tm = (tl + tr) >> 1;
-        t[v].sum = t[2 * v].sum * t[2 * v].mul + (tm - tl + 1) * t[2 * v].add + t[2 * v + 1].sum * t[2 * v + 1].mul + (tr - tm) * t[2 * v + 1].add;
+        t[v].sum = t[2 * v].sum * t[2 * v].mul + (tm - tl + 1) * t[2 * v].add + t[2 * v + 1].sum * t[2 * v + 1].mul +
+                   (tr - tm) * t[2 * v + 1].add;
     }
 
-    void push(int v)
-    {
+    void push(int v) {
         t[2 * v].add *= t[v].mul;
         t[2 * v].add += t[v].add;
         t[2 * v + 1].add *= t[v].mul;
@@ -97,13 +93,11 @@ struct segTree {
         t[v].mul = 1;
     }
 
-    void set(int v, int x)
-    {
+    void set(int v, int x) {
         t[v].sum = x;
     }
 
-    void build(int v, int tl, int tr, int a[])
-    {
+    void build(int v, int tl, int tr, int a[]) {
         if (tl == tr) {
             set(v, a[tl]);
 
@@ -116,13 +110,11 @@ struct segTree {
         pull(v, tl, tr);
     }
 
-    void build(int a[])
-    {
+    void build(int a[]) {
         build(1, 1, this->nn, a);
     }
 
-    void add(int v, int tl, int tr, int L, int R, int x)
-    {
+    void add(int v, int tl, int tr, int L, int R, int x) {
         if (tl == L && tr == R) {
             t[v].add += x;
             return;
@@ -134,11 +126,9 @@ struct segTree {
 
         if (R <= tm) {
             add(2 * v, tl, tm, L, R, x);
-        }
-        else if (L > tm) {
+        } else if (L > tm) {
             add(2 * v + 1, tm + 1, tr, L, R, x);
-        }
-        else {
+        } else {
             add(2 * v, tl, tm, L, tm, x);
             add(2 * v + 1, tm + 1, tr, tm + 1, R, x);
         }
@@ -146,8 +136,7 @@ struct segTree {
         pull(v, tl, tr);
     }
 
-    void mul(int v, int tl, int tr, int L, int R, int x)
-    {
+    void mul(int v, int tl, int tr, int L, int R, int x) {
         if (tl == L && tr == R) {
             t[v].add *= x;
             t[v].mul *= x;
@@ -160,11 +149,9 @@ struct segTree {
 
         if (R <= tm) {
             mul(2 * v, tl, tm, L, R, x);
-        }
-        else if (L > tm) {
+        } else if (L > tm) {
             mul(2 * v + 1, tm + 1, tr, L, R, x);
-        }
-        else {
+        } else {
             mul(2 * v, tl, tm, L, tm, x);
             mul(2 * v + 1, tm + 1, tr, tm + 1, R, x);
         }
@@ -172,18 +159,33 @@ struct segTree {
         pull(v, tl, tr);
     }
 
-    void add(int L, int R, int x)
-    {
+    void add(int L, int R, int x) {
         add(1, 1, this->nn, L, R, x);
     }
 
-    void mul(int L, int R, int x)
-    {
+    void add(int pos, int x) {
+        add(pos, pos, x);
+    }
+
+    void mul(int L, int R, int x) {
         mul(1, 1, this->nn, L, R, x);
     }
 
-    node get(int v, int tl, int tr, int L, int R)
+    void mul(int pos, int x)
     {
+        mul(pos, pos, x);
+    }
+
+    void upd(int L, int R, int x) {
+        mul(L, R, 0);
+        add(L, R, x);
+    }
+
+    void upd(int pos, int x) {
+        mul(pos, pos, x);
+    }
+
+    node get(int v, int tl, int tr, int L, int R) {
         if (tl == L && tr == R) {
             node cur = t[v];
             cur.sum = t[v].sum * t[v].mul + (tr - tl + 1) * t[v].add;
@@ -201,11 +203,9 @@ struct segTree {
 
         if (R <= tm) {
             result = get(2 * v, tl, tm, L, R);
-        }
-        else if (L > tm) {
+        } else if (L > tm) {
             result = get(2 * v + 1, tm + 1, tr, L, R);
-        }
-        else {
+        } else {
             left = get(2 * v, tl, tm, L, tm);
             right = get(2 * v + 1, tm + 1, tr, tm + 1, R);
             result.sum = left.sum + right.sum;
@@ -216,14 +216,18 @@ struct segTree {
         return result;
     }
 
-    node get(int L, int R)
-    {
+    node get(int L, int R) {
         return get(1, 1, this->nn, L, R);
     }
+
+    node get(int pos) {
+        get(pos, pos);
+    }
 };
+
 int a[N];
-main()
-{
+
+main() {
     segTree tree;
 
     int n;
@@ -245,12 +249,10 @@ main()
         if (tp == 1) {
             cin >> l >> r >> x;
             tree.mul(l, r, x); // multiply every element on segment [l;r] to x
-        }
-        else if (tp == 2) {
+        } else if (tp == 2) {
             cin >> l >> r >> x;
             tree.add(l, r, x); // add x to every element on segment [l;r]
-        }
-        else {
+        } else {
             cin >> l >> r;
             cout << tree.get(l, r).sum << endl; // get sum elements on segment [l;r]
         }

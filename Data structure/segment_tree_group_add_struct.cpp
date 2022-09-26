@@ -119,6 +119,16 @@ struct segTree {
         add(1, 1, this->nn, L, R, x);
     }
 
+    void add(int pos, int x) {
+        add(pos, pos, x);
+    }
+
+    void upd(int pos, int x) {
+        int val = get(pos).sum;
+        add(pos, -val); // set value of element to zero
+        add(pos, x);       // set new value to element
+    }
+
     node get(int v, int tl, int tr, int L, int R) {
         if (tl == L && tr == R) {
             node cur = t[v];
@@ -128,7 +138,9 @@ struct segTree {
 
             return cur;
         }
+
         push(v);
+
         int tm = (tl + tr) >> 1;
         node result;
         node left;
@@ -153,6 +165,10 @@ struct segTree {
     node get(int L, int R) {
         return get(1, 1, this->nn, L, R);
     }
+
+    node get(int pos) {
+        return get(pos, pos);
+    }
 };
 
 int a[N + 1];
@@ -164,11 +180,11 @@ int main() {
         int l = readInt(), r = readInt();
         ++l;
         ++r;
-        tree.add(l,r,1);
+        tree.add(l, r, 1);
     }
     for (int i = 1; i <= m; i++) {
         int x = readInt();
         ++x;
-        cout<<tree.get(x,x).sum<<endl;
+        cout << tree.get(x, x).sum << endl;
     }
 }
