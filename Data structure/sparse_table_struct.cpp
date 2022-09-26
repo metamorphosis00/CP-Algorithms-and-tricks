@@ -6,7 +6,8 @@ const int M = 18; // log2(N) => log2(100000) ~ 17
 
 struct sparseTable {
     int *lg = new int[N + 1]; // use dynamic array to avoid runtime error because compiler memory limit
-    int **sp = new int *[N + 1];
+    int **sp = new int *[N + 1]; // for find min value in segment
+    int **tp = new int *[N + 1]; // for find max value in segment
 
     sparseTable(int n) {
         lg[1] = 0;
@@ -16,6 +17,7 @@ struct sparseTable {
 
         for (int i = 1; i <= n; ++i) {
             sp[i] = new int[M + 1];
+            tp[i] = new int[M + 1];
         }
     }
 
@@ -23,6 +25,7 @@ struct sparseTable {
 
         for (int i = 1; i <= n; ++i) {
             sp[i][0] = a[i];
+            tp[i][0] = a[i];
         }
 
         for (int i = 1; (1 << i) <= n; ++i) {
@@ -30,15 +33,23 @@ struct sparseTable {
             for (int j = 1; j + len - 1 <= n; j++) {
                 int tail = j + len - 1;
                 sp[j][i] = min(sp[j][i - 1], sp[tail - len / 2 + 1][i - 1]);
+                tp[j][i] = max(tp[j][i - 1], tp[tail - len / 2 + 1][i - 1]);
             }
         }
     }
 
-    int get(int l, int r) {
+    int getMin(int l, int r) {
         int len = r - l + 1;
         int pw = lg[len];
 
         return min(sp[l][pw], sp[r - (1 << pw) + 1][pw]);
+    }
+
+    int getMax(int l, int r) {
+        int len = r - l + 1;
+        int pw = lg[len];
+
+        return max(tp[l][pw], tp[r - (1 << pw) + 1][pw]);
     }
 };
 
@@ -59,6 +70,6 @@ int main() {
         int l;
         int r;
         cin >> l >> r;
-        cout << table.get(l, r) << " ";
+        cout << table.getMin(l, r) << " ";
     }
 }

@@ -221,7 +221,7 @@ struct segTree {
     }
 
     node get(int pos) {
-        get(pos, pos);
+        return get(pos, pos);
     }
 };
 

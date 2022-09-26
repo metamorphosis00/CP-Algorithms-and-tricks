@@ -137,6 +137,10 @@ struct segTree {
     node get(int L, int R) {
         return get(1, 1, this->nn, L, R);
     }
+
+    node get(int pos) {
+        return get(pos, pos);
+    }
 };
 
 int a[N + 1];
