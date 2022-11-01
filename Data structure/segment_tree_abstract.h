@@ -89,7 +89,7 @@ public:
         pull(v);
     }
 
-    void upd(int pos, int x) {
+    void upd(int pos, T x) {
         upd(1, 1, this->n, pos, x);
     }
 
