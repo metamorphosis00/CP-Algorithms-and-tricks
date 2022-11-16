@@ -121,7 +121,7 @@ public:
     }
 
     T get(int pos) {
-        get(1, 1, this->n, pos, pos);
+        return get(1, 1, this->n, pos, pos);
     }
 };
 
