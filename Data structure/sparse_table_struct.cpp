@@ -1,27 +1,36 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 const int N = 100000;
 const int M = 18; // log2(N) => log2(100000) ~ 17
 
 struct sparseTable {
-    int *lg = new int[N + 1]; // use dynamic array to avoid runtime error because compiler memory limit
-    int **sp = new int *[N + 1]; // for find min value in segment
-    int **tp = new int *[N + 1]; // for find max value in segment
+    vector<int> lg;
+    vector<vector<int> > sp; // for find min value in segment
+    vector<vector<int> > tp; // for find max value in segment
 
-    sparseTable(int n) {
+    sparseTable(int n)
+    {
+        lg.resize(n + 1);
+        sp.resize(n + 1);
+        tp.resize(n + 1);
+
         lg[1] = 0;
         for (int i = 2; i <= n; ++i) {
             lg[i] = lg[i / 2] + 1;
         }
 
+        int m = lg[n] + 1;
+
         for (int i = 1; i <= n; ++i) {
-            sp[i] = new int[M + 1];
-            tp[i] = new int[M + 1];
+            sp[i].resize(m + 1);
+            tp[i].resize(m + 1);
         }
     }
 
-    void build(int n, const int a[]) {
+    void build(int n, const int a[])
+    {
 
         for (int i = 1; i <= n; ++i) {
             sp[i][0] = a[i];
@@ -38,14 +47,16 @@ struct sparseTable {
         }
     }
 
-    int getMin(int l, int r) {
+    int getMin(int l, int r)
+    {
         int len = r - l + 1;
         int pw = lg[len];
 
         return min(sp[l][pw], sp[r - (1 << pw) + 1][pw]);
     }
 
-    int getMax(int l, int r) {
+    int getMax(int l, int r)
+    {
         int len = r - l + 1;
         int pw = lg[len];
 
@@ -55,7 +66,8 @@ struct sparseTable {
 
 int a[N + 1];
 
-int main() {
+int main()
+{
     int n;
     cin >> n;
     for (int i = 1; i <= n; ++i) {
@@ -70,6 +82,6 @@ int main() {
         int l;
         int r;
         cin >> l >> r;
-        cout << table.getMin(l, r) << " ";
+        cout << table.getMin(l, r) << " " << table.getMax(l, r) << endl;
     }
 }
